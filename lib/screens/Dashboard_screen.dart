@@ -19,7 +19,14 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text(
+          'Dashboard',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -38,7 +45,7 @@ class DashboardScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.tealAccent],
+            colors: [Color(0xFF0D0D2B), Color(0xFF1A1A4E), Color(0xFF2D1B6B)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -48,29 +55,40 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Hello You are Welcome',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+              Text(
+                'Hello, Welcome 👋',
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 4),
+              Text(
+                'Manage your finances with ease',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white54,
+                ),
+              ),
+              const SizedBox(height: 32),
               Center(
                 child: Text(
                   'Daily Planner',
                   style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
-                      fontSize: 35,
+                    textStyle: const TextStyle(
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Color(0xFF6C63FF),
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 28),
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
@@ -85,7 +103,7 @@ class DashboardScreen extends StatelessWidget {
                       context,
                       title: 'Expenses',
                       icon: Icons.money_off,
-                      backgroundColor: Colors.red.shade400,
+                      gradientColors: [Color(0xFFFF416C), Color(0xFFFF4B2B)],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => ExpenseScreen()),
@@ -95,7 +113,7 @@ class DashboardScreen extends StatelessWidget {
                       context,
                       title: 'Income',
                       icon: Icons.attach_money,
-                      backgroundColor: Colors.green.shade600,
+                      gradientColors: [Color(0xFF11998E), Color(0xFF38EF7D)],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => IncomeScreen()),
@@ -105,7 +123,7 @@ class DashboardScreen extends StatelessWidget {
                       context,
                       title: 'Investments',
                       icon: Icons.trending_up,
-                      backgroundColor: Colors.blue.shade600,
+                      gradientColors: [Color(0xFF2193B0), Color(0xFF6DD5ED)],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => InvestmentScreen()),
@@ -115,7 +133,7 @@ class DashboardScreen extends StatelessWidget {
                       context,
                       title: 'Meetings',
                       icon: Icons.group,
-                      backgroundColor: Colors.purple.shade600,
+                      gradientColors: [Color(0xFF834D9B), Color(0xFFD04ED6)],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => MeetingsScreen()),
@@ -125,7 +143,7 @@ class DashboardScreen extends StatelessWidget {
                       context,
                       title: 'Budget',
                       icon: Icons.account_balance_wallet,
-                      backgroundColor: const Color.fromARGB(255, 208, 171, 5),
+                      gradientColors: [Color(0xFFF7971E), Color(0xFFFFD200)],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => BudgetScreen()),
@@ -135,7 +153,7 @@ class DashboardScreen extends StatelessWidget {
                       context,
                       title: 'Goal',
                       icon: FontAwesomeIcons.bullseye,
-                      backgroundColor: const Color.fromARGB(255, 191, 109, 3),
+                      gradientColors: [Color(0xFFFF6B6B), Color(0xFFFFA500)],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => GoalScreen()),
@@ -155,32 +173,44 @@ class DashboardScreen extends StatelessWidget {
     BuildContext context, {
     required String title,
     required IconData icon,
-    required Color backgroundColor,
+    required List<Color> gradientColors,
     required VoidCallback onTap,
-    //TextStyle? textStyle,
   }) {
     return Card(
-      elevation: 4,
-      surfaceTintColor: backgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         splashColor: Colors.white24,
         child: Container(
-          padding: EdgeInsets.all(16),
-          color: backgroundColor,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 36, color: Colors.black87),
-              SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, size: 30, color: Colors.white),
+              ),
+              const SizedBox(height: 12),
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 15,
+                  shadows: [Shadow(color: Colors.black26, blurRadius: 4)],
                 ),
               ),
             ],

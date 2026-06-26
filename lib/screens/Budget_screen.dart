@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BudgetScreen extends StatefulWidget {
   const BudgetScreen({super.key});
@@ -45,10 +46,18 @@ class _BudgetScreenState extends State<BudgetScreen>
       _budgetController.clear();
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Budget set Successfully!')));
+      ).showSnackBar(SnackBar(
+        content: const Text('Budget set Successfully!'),
+        backgroundColor: const Color(0xFF1C1C3A),
+        behavior: SnackBarBehavior.floating,
+      ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid budget amount!')),
+        SnackBar(
+          content: const Text('Please enter a valid budget amount!'),
+          backgroundColor: const Color(0xFFFF416C),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     }
   }
@@ -60,12 +69,18 @@ class _BudgetScreenState extends State<BudgetScreen>
       _updateRemainingBudget();
       _expenceController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Expense added successfully!')),
+        SnackBar(
+          content: const Text('Expense added successfully!'),
+          backgroundColor: const Color(0xFF1C1C3A),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid expense amount or insufficient budget!'),
+        SnackBar(
+          content: const Text('Invalid expense amount or insufficient budget!'),
+          backgroundColor: const Color(0xFFFF416C),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
@@ -83,17 +98,23 @@ class _BudgetScreenState extends State<BudgetScreen>
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Budget',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
         ),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.tealAccent],
+            colors: [Color(0xFF0D0D2B), Color(0xFF1A1A4E), Color(0xFF2D1B6B)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -104,46 +125,70 @@ class _BudgetScreenState extends State<BudgetScreen>
           child: Center(
             child: SingleChildScrollView(
               child: Card(
-                elevation: 12,
+                elevation: 20,
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(24),
                 ),
+                color: const Color(0xFF1C1C3A),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 12),
                       Center(
                         child: Text(
                           'Manage Your Monthly Budget',
-                          style: TextStyle(
-                            fontSize: 24,
+                          style: GoogleFonts.poppins(
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange[800],
+                            color: const Color(0xFFF7971E),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 8),
+                      Center(
+                        child: Text(
+                          'Set limits and track spending',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white54,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
                       TextField(
                         controller: _budgetController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
                           labelText: 'Enter Your Budget Amount',
-                          prefixIcon: Icon(Icons.wallet, color: Colors.orange),
+                          labelStyle: const TextStyle(color: Colors.white54),
+                          prefixIcon: const Icon(Icons.wallet, color: Color(0xFFF7971E)),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderRadius: BorderRadius.circular(15),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF3D3D6B)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFFF7971E), width: 2),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFF252547),
                         ),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: _setBudget,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: const Color(0xFFF7971E),
                           foregroundColor: Colors.white,
-                          elevation: 5,
+                          elevation: 8,
+                          shadowColor: const Color(0xFFF7971E).withOpacity(0.5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
@@ -155,78 +200,63 @@ class _BudgetScreenState extends State<BudgetScreen>
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Card(
-                        color: Colors.amber[100],
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.wallet,
-                            color: Colors.orange,
-                          ),
-                          title: const Text('Current Budget:'),
-                          subtitle: Text(
-                            '\$${_currentBudget.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      const SizedBox(height: 24),
+                      _buildInfoCard(
+                        icon: Icons.wallet,
+                        iconColor: const Color(0xFFF7971E),
+                        title: 'Current Budget:',
+                        value: '\$${_currentBudget.toStringAsFixed(2)}',
                       ),
-                      Card(
-                        color: Colors.amber[100],
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.money_off,
-                            color: Colors.red,
-                          ),
-                          title: const Text('Spent Amount:'),
-                          subtitle: Text(
-                            '\$${_spentAmount.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      const SizedBox(height: 10),
+                      _buildInfoCard(
+                        icon: Icons.money_off,
+                        iconColor: const Color(0xFFFF416C),
+                        title: 'Spent Amount:',
+                        value: '\$${_spentAmount.toStringAsFixed(2)}',
                       ),
-                      Card(
-                        color: Colors.amber[100],
-                        child: ListTile(
-                          leading: const Icon(Icons.money, color: Colors.green),
-                          title: const Text('Remaining Amount:'),
-                          subtitle: Text(
-                            '\$${_remainingAmount.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      const SizedBox(height: 10),
+                      _buildInfoCard(
+                        icon: Icons.money,
+                        iconColor: const Color(0xFF38EF7D),
+                        title: 'Remaining Amount:',
+                        value: '\$${_remainingAmount.toStringAsFixed(2)}',
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 28),
                       TextField(
                         controller: _expenceController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
                           labelText: 'Enter Expence Amount',
-                          prefixIcon: Icon(Icons.money, color: Colors.red),
+                          labelStyle: const TextStyle(color: Colors.white54),
+                          prefixIcon: const Icon(Icons.money, color: Color(0xFFFF416C)),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderRadius: BorderRadius.circular(15),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF3D3D6B)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFFFF416C), width: 2),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFF252547),
                         ),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: _addExpense,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: const Color(0xFFFF416C),
                           foregroundColor: Colors.white,
-                          elevation: 5,
+                          elevation: 8,
+                          shadowColor: const Color(0xFFFF416C).withOpacity(0.5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
@@ -237,7 +267,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -248,6 +278,53 @@ class _BudgetScreenState extends State<BudgetScreen>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String value,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF252547),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFF3D3D6B), width: 1),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: iconColor, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(color: Colors.white54, fontSize: 13),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

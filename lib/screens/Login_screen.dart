@@ -53,9 +53,9 @@ class _LoginScreenState extends State<LoginScreen>
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal.shade700, Colors.tealAccent.shade100],
+            colors: [Color(0xFF0D0D2B), Color(0xFF1A1A4E), Color(0xFF2D1B6B)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -65,94 +65,143 @@ class _LoginScreenState extends State<LoginScreen>
           child: Center(
             child: SingleChildScrollView(
               child: Card(
-                elevation: 12,
+                elevation: 20,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                color: Colors.white.withOpacity(0.95),
+                color: const Color(0xFF1C1C3A),
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(28.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Center(
                         child: Text(
-                          'Personal Assistant',
+                          'WealthWise',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            color: Colors.teal[800],
+                            color: const Color(0xFF6C63FF),
+                            letterSpacing: 1.2,
                           ),
                         ),
                       ),
-                      SizedBox(height: 40),
-                      Text(
-                        'Login to your Personal Assistant',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
+                      const SizedBox(height: 8),
+                      Center(
+                        child: Text(
+                          'Your Personal Finance Assistant',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white54,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 36),
+                      Text(
+                        'Welcome Back',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Sign in to continue',
+                        style: TextStyle(fontSize: 14, color: Colors.white54),
+                      ),
+                      const SizedBox(height: 24),
                       TextField(
                         controller: emailController,
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Email',
+                          labelStyle: const TextStyle(color: Colors.white54),
+                          prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF6C63FF)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF6C63FF)),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF3D3D6B)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFF252547),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextField(
                         controller: passwordController,
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Password',
+                          labelStyle: const TextStyle(color: Colors.white54),
+                          prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF6C63FF)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF3D3D6B)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFF252547),
                         ),
                         obscureText: true,
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 36),
                       ElevatedButton(
                         onPressed: login,
                         style: ElevatedButton.styleFrom(
-                          disabledBackgroundColor: Colors.teal,
+                          backgroundColor: const Color(0xFF6C63FF),
                           foregroundColor: Colors.white,
-                          elevation: 5,
+                          elevation: 8,
+                          shadowColor: const Color(0xFF6C63FF).withOpacity(0.5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          //minimumSize: Size(double.infinity, 50), // full width
+                          minimumSize: const Size(double.infinity, 52),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Login',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        "Or",
-                        style: TextStyle(fontSize: 20, color: Colors.redAccent),
-                        textAlign: TextAlign.center,
+                      const SizedBox(height: 24),
+                      Row(
+                        children: const [
+                          Expanded(child: Divider(color: Color(0xFF3D3D6B))),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text('OR', style: TextStyle(color: Colors.white38, fontSize: 12)),
+                          ),
+                          Expanded(child: Divider(color: Color(0xFF3D3D6B))),
+                        ],
                       ),
-
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Don't have an account? ",
                             style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 18,
+                              color: Colors.white54,
+                              fontSize: 15,
                             ),
                           ),
                           GestureDetector(
@@ -164,19 +213,20 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               "Sign up",
                               style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 16,
+                                color: Color(0xFF6C63FF),
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
+                                decorationColor: Color(0xFF6C63FF),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 25),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

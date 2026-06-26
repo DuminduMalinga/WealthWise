@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MeetingsScreen extends StatefulWidget {
   const MeetingsScreen({super.key});
@@ -58,6 +59,20 @@ class _MeetingsScreenState extends State<MeetingsScreen>
       initialDate: meetingDate ?? now,
       firstDate: DateTime(now.year - 5),
       lastDate: DateTime(now.year + 5),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFFD04ED6),
+              onPrimary: Colors.white,
+              surface: Color(0xFF1C1C3A),
+              onSurface: Colors.white,
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Color(0xFF0D0D2B)),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
@@ -70,6 +85,20 @@ class _MeetingsScreenState extends State<MeetingsScreen>
     final picked = await showTimePicker(
       context: context,
       initialTime: meetingTime ?? TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFFD04ED6),
+              onPrimary: Colors.white,
+              surface: Color(0xFF1C1C3A),
+              onSurface: Colors.white,
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Color(0xFF0D0D2B)),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
@@ -91,22 +120,53 @@ class _MeetingsScreenState extends State<MeetingsScreen>
     return '$hour:$minute $period';
   }
 
+  InputDecoration _buildInputDecoration({
+    required String label,
+    required IconData icon,
+    Color iconColor = const Color(0xFFD04ED6),
+  }) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white54, fontWeight: FontWeight.w500),
+      prefixIcon: Icon(icon, color: iconColor),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF3D3D6B)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: iconColor, width: 2),
+      ),
+      filled: true,
+      fillColor: const Color(0xFF252547),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Organize Meetings',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
         ),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.tealAccent],
+            colors: [Color(0xFF0D0D2B), Color(0xFF1A1A4E), Color(0xFF2D1B6B)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -114,213 +174,250 @@ class _MeetingsScreenState extends State<MeetingsScreen>
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: Center(
-            child: Card(
-              elevation: 12,
-              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Text(
-                          'Plan Your Upcoming Meeting',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 159, 73, 8),
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 20,
+                margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                color: const Color(0xFF1C1C3A),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 12),
+                        Center(
+                          child: Text(
+                            'Plan Your Upcoming Meeting',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFFD04ED6),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Meeting Name',
-                          labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                          prefixIcon: Icon(FontAwesomeIcons.handshake),
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 240, 226, 186),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                        const SizedBox(height: 8),
+                        Center(
+                          child: Text(
+                            'Schedule and organize with ease',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white54,
+                            ),
                           ),
                         ),
-                        onSaved: (val) => meetingName = val,
-                        validator: (val) => val == null || val.isEmpty
-                            ? 'Enter meeting name'
-                            : null,
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _pickDate,
-                              icon: const Icon(Icons.calendar_today),
-                              label: Text(getFormattedDate()),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.teal,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                        const SizedBox(height: 24),
+                        TextFormField(
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _buildInputDecoration(
+                            label: 'Meeting Name',
+                            icon: FontAwesomeIcons.handshake,
+                          ),
+                          onSaved: (val) => meetingName = val,
+                          validator: (val) => val == null || val.isEmpty
+                              ? 'Enter meeting name'
+                              : null,
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _pickDate,
+                                icon: const Icon(Icons.calendar_today, size: 18),
+                                label: Text(
+                                  getFormattedDate(),
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF834D9B),
+                                  foregroundColor: Colors.white,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _pickTime,
-                              icon: const Icon(Icons.access_time),
-                              label: Text(getFormattedTime()),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.teal,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _pickTime,
+                                icon: const Icon(Icons.access_time, size: 18),
+                                label: Text(
+                                  getFormattedTime(),
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF834D9B),
+                                  foregroundColor: Colors.white,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: isOnline,
-                            onChanged: (val) {
-                              setState(() {
-                                isOnline = val ?? false;
-                              });
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Theme(
+                              data: ThemeData(
+                                checkboxTheme: CheckboxThemeData(
+                                  fillColor: WidgetStateProperty.resolveWith(
+                                    (states) => states.contains(WidgetState.selected)
+                                        ? const Color(0xFFD04ED6)
+                                        : const Color(0xFF252547),
+                                  ),
+                                  checkColor: WidgetStateProperty.all(Colors.white),
+                                  side: const BorderSide(color: Color(0xFF3D3D6B), width: 2),
+                                ),
+                              ),
+                              child: Checkbox(
+                                value: isOnline,
+                                onChanged: (val) {
+                                  setState(() {
+                                    isOnline = val ?? false;
+                                  });
+                                },
+                              ),
+                            ),
+                            Text(
+                              'Online Meeting',
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        if (!isOnline)
+                          TextFormField(
+                            style: const TextStyle(color: Colors.white),
+                            decoration: _buildInputDecoration(
+                              label: 'Venue',
+                              icon: FontAwesomeIcons.locationDot,
+                              iconColor: const Color(0xFFFF6B6B),
+                            ),
+                            onSaved: (val) => venue = val,
+                            validator: (val) {
+                              if (!isOnline && (val == null || val.isEmpty)) {
+                                return 'Enter venue';
+                              }
+                              return null;
                             },
                           ),
-                          const Text(
-                            'Online Meeting',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      if (!isOnline)
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Venue',
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                            prefixIcon: Icon(FontAwesomeIcons.locationDot),
-                            filled: true,
-                            fillColor: Color.fromARGB(255, 240, 226, 186),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                              ),
+                        if (isOnline)
+                          TextFormField(
+                            style: const TextStyle(color: Colors.white),
+                            decoration: _buildInputDecoration(
+                              label: 'Online Meeting Link',
+                              icon: FontAwesomeIcons.link,
+                              iconColor: const Color(0xFF6DD5ED),
                             ),
+                            onSaved: (val) => link = val,
+                            validator: (val) {
+                              if (isOnline && (val == null || val.isEmpty)) {
+                                return 'Enter meeting link';
+                              }
+                              return null;
+                            },
                           ),
-                          onSaved: (val) => venue = val,
-                          validator: (val) {
-                            if (!isOnline && (val == null || val.isEmpty)) {
-                              return 'Enter venue';
-                            }
-                            return null;
-                          },
-                        ),
-                      if (isOnline)
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Online Meeting Link',
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                            prefixIcon: Icon(FontAwesomeIcons.link),
-                            filled: true,
-                            fillColor: Color.fromARGB(255, 240, 226, 186),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                              ),
-                            ),
-                          ),
-                          onSaved: (val) => link = val,
-                          validator: (val) {
-                            if (isOnline && (val == null || val.isEmpty)) {
-                              return 'Enter meeting link';
-                            }
-                            return null;
-                          },
-                        ),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
+                        const SizedBox(height: 28),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
 
-                            if (meetingName == null ||
-                                meetingName!.isEmpty ||
-                                meetingDate == null ||
-                                meetingTime == null ||
-                                (isOnline && (link == null || link!.isEmpty)) ||
-                                (!isOnline &&
-                                    (venue == null || venue!.isEmpty))) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Please fill in all required fields.',
+                              if (meetingName == null ||
+                                  meetingName!.isEmpty ||
+                                  meetingDate == null ||
+                                  meetingTime == null ||
+                                  (isOnline && (link == null || link!.isEmpty)) ||
+                                  (!isOnline &&
+                                      (venue == null || venue!.isEmpty))) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text(
+                                      'Please fill in all required fields.',
+                                    ),
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: const Color(0xFFFF416C),
                                   ),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.redAccent,
+                                );
+                                return;
+                              }
+
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  backgroundColor: const Color(0xFF1C1C3A),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  title: const Text(
+                                    'Meeting Info',
+                                    style: TextStyle(
+                                      color: Color(0xFFD04ED6),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'Name: $meetingName\n'
+                                    'Date: ${getFormattedDate()}\n'
+                                    'Time: ${getFormattedTime()}\n'
+                                    '${isOnline ? "Link: $link\nOnline Meeting" : "Venue: $venue\nPhysical Meeting"}',
+                                    style: const TextStyle(color: Colors.white70),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        resetForm();
+                                      },
+                                      child: const Text(
+                                        'OK',
+                                        style: TextStyle(color: Color(0xFFD04ED6)),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
-                              return;
                             }
-
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: const Text('Meeting Info'),
-                                content: Text(
-                                  'Name: $meetingName\n'
-                                  'Date: ${getFormattedDate()}\n'
-                                  'Time: ${getFormattedTime()}\n'
-                                  '${isOnline ? "Link: $link\nOnline Meeting" : "Venue: $venue\nPhysical Meeting"}',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      resetForm();
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF834D9B),
+                            foregroundColor: Colors.white,
+                            elevation: 8,
+                            shadowColor: const Color(0xFF834D9B).withOpacity(0.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            minimumSize: const Size(double.infinity, 50),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                          child: const Text(
+                            'Save Meeting',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        child: const Text(
-                          'Save Meeting',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

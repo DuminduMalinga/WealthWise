@@ -62,14 +62,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       lastDate: DateTime(now.year + 5),
       builder: (context, child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: Colors.teal,
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFFFF416C),
               onPrimary: Colors.white,
-              surface: Colors.black,
+              surface: Color(0xFF1C1C3A),
               onSurface: Colors.white,
             ),
-            dialogTheme: DialogThemeData(backgroundColor: Colors.black87),
+            dialogTheme: const DialogThemeData(backgroundColor: Color(0xFF0D0D2B)),
           ),
           child: child!,
         );
@@ -107,12 +107,15 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1C1C3A),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Income saved:\n'
           'Type: $selectedExpenseType\n'
           'Amount: ${amountController.text}\n'
           'Payment: $selectedPaymentMethod\n'
           'Date: $formattedDate',
+          style: const TextStyle(color: Colors.white, fontSize: 14),
         ),
         actions: [
           TextButton(
@@ -120,10 +123,31 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               Navigator.pop(context);
               resetForm();
             },
-            child: const Text('OK'),
+            child: const Text('OK', style: TextStyle(color: Color(0xFFFF416C))),
           ),
         ],
       ),
+    );
+  }
+
+  InputDecoration _fieldDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white54),
+      prefixIcon: Icon(icon, color: const Color(0xFFFF416C)),
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFF3D3D6B)),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFFFF416C), width: 2),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      filled: true,
+      fillColor: const Color(0xFF252547),
     );
   }
 
@@ -134,9 +158,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       appBar: AppBar(
         title: const Text(
           ' Add Expenses',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
         backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         actions: [
           IconButton(
@@ -154,7 +179,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.tealAccent],
+            colors: [Color(0xFF0D0D2B), Color(0xFF1A1A4E), Color(0xFF2D1020)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -164,32 +189,39 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Card(
-              elevation: 10,
+              elevation: 16,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(24),
               ),
-              color: Colors.white.withOpacity(0.95),
+              color: const Color(0xFF1C1C3A),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Add Expense',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 222, 126, 7),
-                      ),
+                    Row(
+                      children: const [
+                        Icon(Icons.money_off, color: Color(0xFFFF416C), size: 28),
+                        SizedBox(width: 8),
+                        Text(
+                          'Add Expense',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFF416C),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     DropdownButtonFormField<String>(
                       value: selectedExpenseType,
                       hint: const Text(
                         'Select Expense Type',
-                        style: TextStyle(color: Colors.black54),
+                        style: TextStyle(color: Colors.white54),
                       ),
+                      dropdownColor: const Color(0xFF252547),
+                      style: const TextStyle(color: Colors.white),
                       items: expenseTypes.map((Category) {
                         return DropdownMenuItem(
                           value: Category,
@@ -201,46 +233,20 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                           selectedExpenseType = value;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Expense Type',
-                        prefixIcon: Icon(Icons.category, color: Colors.teal),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
-                      ),
+                      decoration: _fieldDecoration('Expense Type', Icons.category),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: amountController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Amount',
-                        prefixIcon: Icon(Icons.money_off, color: Colors.teal),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
-                      ),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: _fieldDecoration('Amount', Icons.money_off),
                     ),
                     const SizedBox(height: 16),
                     InkWell(
                       onTap: pickDate,
                       child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Date',
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color.fromARGB(255, 240, 226, 186),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 240, 226, 186),
-                        ),
+                        decoration: _fieldDecoration('Date', Icons.calendar_today),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -253,14 +259,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                               style: TextStyle(
                                 color: selectedDate != null
-                                    ? Colors.black
-                                    : Colors.black87,
+                                    ? Colors.white
+                                    : Colors.white38,
                                 fontSize: 15,
                               ),
                             ),
                             const Icon(
                               Icons.arrow_drop_down,
-                              color: Colors.black54,
+                              color: Colors.white38,
                             ),
                           ],
                         ),
@@ -271,8 +277,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                       value: selectedPaymentMethod,
                       hint: const Text(
                         'Select Payment Method',
-                        style: TextStyle(color: Colors.black54),
+                        style: TextStyle(color: Colors.white54),
                       ),
+                      dropdownColor: const Color(0xFF252547),
+                      style: const TextStyle(color: Colors.white),
                       items: paymentMethods.map((method) {
                         return DropdownMenuItem(
                           value: method,
@@ -284,56 +292,26 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                           selectedPaymentMethod = value;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Payment Method',
-                        prefixIcon: Icon(Icons.payment, color: Colors.teal),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                      ),
+                      decoration: _fieldDecoration('Payment Method', Icons.payment),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description(optional)',
-                        prefixIcon: Icon(Icons.note, color: Colors.teal),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                      ),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: _fieldDecoration('Description (optional)', Icons.note),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: saveExpense,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
+                        backgroundColor: const Color(0xFFFF416C),
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        minimumSize: const Size(double.infinity, 50),
-                        elevation: 5,
+                        minimumSize: const Size(double.infinity, 52),
+                        elevation: 6,
+                        shadowColor: const Color(0xFFFF416C).withOpacity(0.4),
                       ),
                       child: const Text(
                         'Save Expense',

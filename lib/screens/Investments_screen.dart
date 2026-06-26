@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class InvestmentScreen extends StatefulWidget {
   const InvestmentScreen({super.key});
@@ -55,8 +56,10 @@ class _InvestmentScreenState extends State<InvestmentScreen>
 
     if (amount == null || amount <= 0 || _investmentDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill all required fields with valid values!'),
+        SnackBar(
+          content: const Text('Please fill all required fields with valid values!'),
+          backgroundColor: const Color(0xFFFF416C),
+          behavior: SnackBarBehavior.floating,
         ),
       );
       return;
@@ -65,6 +68,8 @@ class _InvestmentScreenState extends State<InvestmentScreen>
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1C1C3A),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Investment saved:\n'
           'Type: $_selectedType\n'
@@ -72,6 +77,7 @@ class _InvestmentScreenState extends State<InvestmentScreen>
           'Expected Return: ${_expectedReturnController.text.isEmpty ? "N/A" : _expectedReturnController.text}\n'
           'Date: ${_investmentDate!.year}-${_investmentDate!.month.toString().padLeft(2, '0')}-${_investmentDate!.day.toString().padLeft(2, '0')}\n'
           'Status: $_selectedStatus',
+          style: const TextStyle(color: Colors.white, fontSize: 14),
         ),
         actions: [
           TextButton(
@@ -79,7 +85,7 @@ class _InvestmentScreenState extends State<InvestmentScreen>
               Navigator.pop(context);
               resetForm();
             },
-            child: const Text('OK'),
+            child: const Text('OK', style: TextStyle(color: Color(0xFF6DD5ED))),
           ),
         ],
       ),
@@ -92,11 +98,50 @@ class _InvestmentScreenState extends State<InvestmentScreen>
       initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFF6DD5ED),
+              onPrimary: Colors.white,
+              surface: Color(0xFF1C1C3A),
+              onSurface: Colors.white,
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Color(0xFF0D0D2B)),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
       setState(() => _investmentDate = picked);
     }
+  }
+
+  InputDecoration _buildInputDecoration({
+    required String label,
+    required IconData icon,
+    Color iconColor = const Color(0xFF6DD5ED),
+  }) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white54),
+      prefixIcon: Icon(icon, color: iconColor),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF3D3D6B)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: iconColor, width: 2),
+      ),
+      filled: true,
+      fillColor: const Color(0xFF252547),
+    );
   }
 
   @override
@@ -106,15 +151,21 @@ class _InvestmentScreenState extends State<InvestmentScreen>
       appBar: AppBar(
         title: Text(
           'Track Investments',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
         ),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.tealAccent],
+            colors: [Color(0xFF0D0D2B), Color(0xFF1A1A4E), Color(0xFF2D1B6B)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -123,160 +174,150 @@ class _InvestmentScreenState extends State<InvestmentScreen>
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: Center(
-            child: Card(
-              elevation: 12,
-              margin: const EdgeInsets.symmetric(horizontal: 24),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusGeometry.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 20),
-                    Center(
-                      child: Text(
-                        'Add Investment Details',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 1, 91, 160),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    DropdownButtonFormField<String>(
-                      value: _selectedType,
-                      decoration: InputDecoration(
-                        labelText: 'Investment Type',
-                        prefixIcon: Icon(
-                          Icons.trending_up,
-                          color: Colors.green,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
-                      ),
-                      items: ['stocks', 'Real Estate', 'Mutual Funds', 'Bonds']
-                          .map(
-                            (type) => DropdownMenuItem(
-                              value: type,
-                              child: Text(type),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (val) => setState(() => _selectedType = val!),
-                    ),
-
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Amount Invested',
-                        prefixIcon: Icon(
-                          FontAwesomeIcons.moneyBill,
-                          color: Colors.green,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    InkWell(
-                      onTap: () => _selectDate(context),
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Date of Investment',
-                          prefixIcon: Icon(
-                            Icons.date_range,
-                            color: Colors.green,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 240, 226, 186),
-                        ),
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 20,
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                color: const Color(0xFF1C1C3A),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 12),
+                      Center(
                         child: Text(
-                          _investmentDate == null
-                              ? 'Select Date'
-                              : _investmentDate!.toLocal().toString().split(
-                                  '',
-                                )[0],
-                          style: const TextStyle(color: Colors.black87),
+                          'Add Investment Details',
+                          style: GoogleFonts.poppins(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF6DD5ED),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _expectedReturnController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Expected Return(optional)',
-                        prefixIcon: Icon(Icons.percent, color: Colors.green),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                      const SizedBox(height: 8),
+                      Center(
+                        child: Text(
+                          'Track and manage your portfolio',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white54,
+                          ),
                         ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    DropdownButtonFormField<String>(
-                      value: _selectedStatus,
-                      decoration: const InputDecoration(
-                        labelText: 'Status',
-                        prefixIcon: Icon(Icons.info, color: Colors.green),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                      const SizedBox(height: 24),
+                      DropdownButtonFormField<String>(
+                        value: _selectedType,
+                        dropdownColor: const Color(0xFF1C1C3A),
+                        style: const TextStyle(color: Colors.white),
+                        decoration: _buildInputDecoration(
+                          label: 'Investment Type',
+                          icon: Icons.trending_up,
+                          iconColor: const Color(0xFF38EF7D),
                         ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 240, 226, 186),
+                        items: ['stocks', 'Real Estate', 'Mutual Funds', 'Bonds']
+                            .map(
+                              (type) => DropdownMenuItem(
+                                value: type,
+                                child: Text(type),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) => setState(() => _selectedType = val!),
                       ),
-                      items: ['Active', 'Closed', 'Pending']
-                          .map(
-                            (status) => DropdownMenuItem(
-                              value: status,
-                              child: Text(status),
+
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _amountController,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: _buildInputDecoration(
+                          label: 'Amount Invested',
+                          icon: FontAwesomeIcons.moneyBill,
+                          iconColor: const Color(0xFF38EF7D),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      InkWell(
+                        onTap: () => _selectDate(context),
+                        child: InputDecorator(
+                          decoration: _buildInputDecoration(
+                            label: 'Date of Investment',
+                            icon: Icons.date_range,
+                            iconColor: const Color(0xFF6DD5ED),
+                          ),
+                          child: Text(
+                            _investmentDate == null
+                                ? 'Select Date'
+                                : '${_investmentDate!.year}-${_investmentDate!.month.toString().padLeft(2, '0')}-${_investmentDate!.day.toString().padLeft(2, '0')}',
+                            style: TextStyle(
+                              color: _investmentDate == null
+                                  ? Colors.white38
+                                  : Colors.white,
                             ),
-                          )
-                          .toList(),
-                      onChanged: (val) =>
-                          setState(() => _selectedStatus = val!),
-                    ),
-                    const SizedBox(height: 24),
-                    Center(
-                      child: ElevatedButton(
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _expectedReturnController,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: _buildInputDecoration(
+                          label: 'Expected Return (optional)',
+                          icon: Icons.percent,
+                          iconColor: const Color(0xFFF7971E),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<String>(
+                        value: _selectedStatus,
+                        dropdownColor: const Color(0xFF1C1C3A),
+                        style: const TextStyle(color: Colors.white),
+                        decoration: _buildInputDecoration(
+                          label: 'Status',
+                          icon: Icons.info,
+                          iconColor: const Color(0xFF6C63FF),
+                        ),
+                        items: ['Active', 'Closed', 'Pending']
+                            .map(
+                              (status) => DropdownMenuItem(
+                                value: status,
+                                child: Text(status),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) =>
+                            setState(() => _selectedStatus = val!),
+                      ),
+                      const SizedBox(height: 28),
+                      ElevatedButton(
                         onPressed: _saveInvestment,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
+                          backgroundColor: const Color(0xFF2193B0),
+                          foregroundColor: Colors.white,
+                          elevation: 8,
+                          shadowColor: const Color(0xFF2193B0).withOpacity(0.5),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadiusGeometry.circular(15),
+                            borderRadius: BorderRadius.circular(50),
                           ),
+                          minimumSize: const Size(double.infinity, 50),
                         ),
                         child: const Text(
                           'Save Investment',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
